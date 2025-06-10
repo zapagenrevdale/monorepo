@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "name": "@gdz",
+  "version": "1.0.0",
+  "description": "This is my ideal monorepo setup",
+  "packageManager": "pnpm@10.10.0",
+  "engines": {
+    "node": ">=22.14.0",
+    "pnpm": "10.10.0"
+  }
+}
