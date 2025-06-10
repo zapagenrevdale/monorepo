@@ -1,17 +1,29 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
-
-function getDomain({
+function getSubDomain({
   domain,
-  name
+  sha
 }: {
   domain: string
-  name?: string;
+  sha: string;
 }) {
-  let prefix = name ? `${name}.` : "";
+  let prefix = sha ? `${sha}.` : "";
 
   let subdomain = $app.protect ? `${prefix}${$app.stage}.${domain}` : null;
   return subdomain;
+}
+
+function getPrefix({
+  name,
+  sha,
+  subdomain
+}: {
+  name: string
+  subdomain: string;
+  sha?: string;
+}) {
+  const previewTag = sha ? `-${sha}` : "";
+  return `${name}${previewTag}.${subdomain}`;
 }
 
 export default $config({
@@ -26,9 +38,9 @@ export default $config({
   async run() {
 
     const domain = "genrevzapa.com";
-    const name = process.env.PREVIEW_NAME ?? undefined;
+    const sha = process.env.COMMIT_SHA ?? undefined;
 
-    const subdomain = getDomain({ domain, name })
+    const subdomain = getSubDomain({ domain, sha })
 
     const router = subdomain ? new sst.aws.Router("MyRouter", {
       domain: {
@@ -41,6 +53,7 @@ export default $config({
       path: "../apps/my-app/",
       router: {
         instance: router,
+        domain: `${getPrefix({ subdomain, name: "app", sha })}.${subdomain}`
       },
       build: {
         command: "pnpm run build",
@@ -48,22 +61,20 @@ export default $config({
       }
     });
 
-
     new sst.aws.Nextjs("MyDocs", {
       path: "../apps/my-docs/",
       router: {
         instance: router,
-        domain: `docs.${subdomain}`
+        domain: `${getPrefix({ subdomain, name: "docs", sha })}.${subdomain}`
       }
     });
-
 
     new sst.aws.Function("MyApi", {
       handler: "../apps/my-api/src/index.handler",
       url: {
         router: {
           instance: router,
-          path: "/api"
+          domain: `${getPrefix({ subdomain, name: "api", sha })}.${subdomain}`
         }
       }
     });

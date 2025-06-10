@@ -2,12 +2,18 @@
   "name": "@gdz/docs",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "check-types": "tsc --noEmit",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint src/ --max-warnings=0 --format stylish",
+    "lint:fix": "next lint --fix --max-warnings=0",
+    "clean": "git clean -xdf .next .turbo .open-next node_modules .cache",
+    "cache-clean": "git clean -xdf .next .turbo .open-next .cache",
+    "format": "prettier --check src/",
+    "format:fix": "prettier --write src/"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
@@ -21,19 +27,20 @@
     "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "@gdz/eslint": "workspace:^",
     "@gdz/prettier": "workspace:^",
     "@gdz/typescript": "workspace:*",
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
+    "prettier": "catalog:",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.4",
     "typescript": "catalog:"
   },
-  "prettier": "@aether/prettier"
+  "prettier": "@gdz/prettier"
 }
