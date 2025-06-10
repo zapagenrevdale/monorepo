@@ -7,6 +7,9 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@gdz/eslint": "workspace:^",
+    "@gdz/prettier": "workspace:^",
+    "@gdz/typescript": "workspace:*",
     "tsx": "^4.19.3",
     "typescript": "catalog:",
     "@types/node": "catalog:"
@@ -14,5 +17,6 @@
   "dependencies": {
     "@hono/node-server": "^1.14.4",
     "hono": "^4.7.11"
-  }
+  },
+  "prettier": "@aether/prettier"
 }

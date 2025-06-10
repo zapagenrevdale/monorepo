@@ -1,0 +1,19 @@
+{
+  "name": "@gdz/prettier",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo node_modules .cache",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@gdz/typescript": "workspace:*",
+    "prettier": "catalog:"
+  },
+  "prettier": "@gdz/prettier-config"
+}
