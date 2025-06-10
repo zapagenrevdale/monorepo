@@ -1,6 +1,11 @@
 {
   "private": true,
   "name": "@gdz",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "check-types": "turbo run check-types --parallel",
+    "build": "turbo run build"
+  },
   "version": "1.0.0",
   "description": "This is my ideal monorepo setup",
   "packageManager": "pnpm@10.10.0",
