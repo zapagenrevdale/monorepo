@@ -2,6 +2,7 @@
   "name": "@gdz/api",
   "type": "module",
   "scripts": {
+    "check-types": "tsc --noEmit",
     "build": "esbuild --bundle --outfile=./dist/index.js --platform=node --target=node20 ./src/index.ts",
     "zip": "zip -j lambda.zip dist/index.js",
     "update": "aws lambda update-function-code --zip-file fileb://lambda.zip --function-name hello",
