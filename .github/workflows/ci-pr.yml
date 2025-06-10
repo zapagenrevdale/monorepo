@@ -3,9 +3,8 @@ name: Preview Deployment
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-    branches-ignore:
+    branches:
       - dev
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
