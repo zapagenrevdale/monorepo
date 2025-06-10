@@ -4,6 +4,28 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@types/node':
+      specifier: ^22.14.0
+      version: 22.15.31
+    typescript:
+      specifier: 5.8.3
+      version: 5.8.3
+  react19:
+    '@types/react':
+      specifier: 19.1.2
+      version: 19.1.2
+    '@types/react-dom':
+      specifier: 19.1.2
+      version: 19.1.2
+    react:
+      specifier: 19.1.0
+      version: 19.1.0
+    react-dom:
+      specifier: 19.1.0
+      version: 19.1.0
+
 importers:
 
   .:
@@ -11,19 +33,6 @@ importers:
       turbo:
         specifier: ^2.5.4
         version: 2.5.4
-
-  apps/aws-hono:
-    dependencies:
-      hono:
-        specifier: ^4.7.11
-        version: 4.7.11
-    devDependencies:
-      esbuild:
-        specifier: ^0.21.4
-        version: 0.21.5
-      npm-run-all2:
-        specifier: ^6.2.0
-        version: 6.2.6
 
   apps/my-api:
     dependencies:
@@ -41,24 +50,24 @@ importers:
   apps/my-app:
     dependencies:
       react:
-        specifier: ^19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-dom:
-        specifier: ^19.1.0
+        specifier: catalog:react19
         version: 19.1.0(react@19.1.0)
     devDependencies:
       '@eslint/js':
         specifier: ^9.25.0
         version: 9.28.0
       '@types/react':
-        specifier: ^19.1.2
-        version: 19.1.7
+        specifier: catalog:react19
+        version: 19.1.2
       '@types/react-dom':
-        specifier: ^19.1.2
-        version: 19.1.6(@types/react@19.1.7)
+        specifier: catalog:react19
+        version: 19.1.2(@types/react@19.1.2)
       '@vitejs/plugin-react':
         specifier: ^4.4.1
-        version: 4.5.2(vite@6.3.5(@types/node@20.19.0)(jiti@2.4.2)(lightningcss@1.30.1))
+        version: 4.5.2(vite@6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1))
       eslint:
         specifier: ^9.25.0
         version: 9.28.0(jiti@2.4.2)
@@ -72,14 +81,14 @@ importers:
         specifier: ^16.0.0
         version: 16.2.0
       typescript:
-        specifier: ~5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       typescript-eslint:
         specifier: ^8.30.1
         version: 8.34.0(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
       vite:
         specifier: ^6.3.5
-        version: 6.3.5(@types/node@20.19.0)(jiti@2.4.2)(lightningcss@1.30.1)
+        version: 6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1)
 
   apps/my-docs:
     dependencies:
@@ -87,10 +96,10 @@ importers:
         specifier: 15.3.3
         version: 15.3.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: ^19.0.0
+        specifier: catalog:react19
         version: 19.1.0
       react-dom:
-        specifier: ^19.0.0
+        specifier: catalog:react19
         version: 19.1.0(react@19.1.0)
     devDependencies:
       '@eslint/eslintrc':
@@ -100,14 +109,14 @@ importers:
         specifier: ^4
         version: 4.1.8
       '@types/node':
-        specifier: ^20
-        version: 20.19.0
+        specifier: 'catalog:'
+        version: 22.15.31
       '@types/react':
-        specifier: ^19
-        version: 19.1.7
+        specifier: catalog:react19
+        version: 19.1.2
       '@types/react-dom':
-        specifier: ^19
-        version: 19.1.6(@types/react@19.1.7)
+        specifier: catalog:react19
+        version: 19.1.2(@types/react@19.1.2)
       eslint:
         specifier: ^9
         version: 9.28.0(jiti@2.4.2)
@@ -118,7 +127,7 @@ importers:
         specifier: ^4
         version: 4.1.8
       typescript:
-        specifier: ^5
+        specifier: 'catalog:'
         version: 5.8.3
 
 packages:
@@ -1006,16 +1015,16 @@ packages:
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
 
-  '@types/node@20.19.0':
-    resolution: {integrity: sha512-hfrc+1tud1xcdVTABC2JiomZJEklMcXYNTVtZLAeqTVWD+qL5jkHKT+1lOtqDdGxt+mB53DTtiz673vfjU8D1Q==}
+  '@types/node@22.15.31':
+    resolution: {integrity: sha512-jnVe5ULKl6tijxUhvQeNbQG/84fHfg+yMak02cT8QVhBx/F05rAVxCGBYYTh2EKz22D6JF5ktXuNwdx7b9iEGw==}
 
-  '@types/react-dom@19.1.6':
-    resolution: {integrity: sha512-4hOiT/dwO8Ko0gV1m/TJZYk3y0KBnY9vzDh7W+DH17b2HFSOGgdj33dhihPeuy3l0q23+4e+hoXHV6hCC4dCXw==}
+  '@types/react-dom@19.1.2':
+    resolution: {integrity: sha512-XGJkWF41Qq305SKWEILa1O8vzhb3aOo3ogBlSmiqNko/WmRb6QIaweuZCXjKygVDXpzXb5wyxKTSOsmkuqj+Qw==}
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.1.7':
-    resolution: {integrity: sha512-BnsPLV43ddr05N71gaGzyZ5hzkCmGwhMvYc8zmvI8Ci1bRkkDSzDDVfAXfN2tk748OwI7ediiPX6PfT9p0QGVg==}
+  '@types/react@19.1.2':
+    resolution: {integrity: sha512-oxLPMytKchWGbnQM9O7D67uPa9paTNxO7jVoNMXgkkErULBPhPARCfkKL9ytcIJJRGjbsVwW4ugJzyFFvm/Tiw==}
 
   '@typescript-eslint/eslint-plugin@8.34.0':
     resolution: {integrity: sha512-QXwAlHlbcAwNlEEMKQS2RCgJsgXrTJdjXT08xEgbPFa2yYQgVjBymxP5DrfrE7X7iodSzd9qBUHUycdyVJTW1w==}
@@ -3235,15 +3244,15 @@ snapshots:
 
   '@types/json5@0.0.29': {}
 
-  '@types/node@20.19.0':
+  '@types/node@22.15.31':
     dependencies:
       undici-types: 6.21.0
 
-  '@types/react-dom@19.1.6(@types/react@19.1.7)':
+  '@types/react-dom@19.1.2(@types/react@19.1.2)':
     dependencies:
-      '@types/react': 19.1.7
+      '@types/react': 19.1.2
 
-  '@types/react@19.1.7':
+  '@types/react@19.1.2':
     dependencies:
       csstype: 3.1.3
 
@@ -3392,7 +3401,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.7.12':
     optional: true
 
-  '@vitejs/plugin-react@4.5.2(vite@6.3.5(@types/node@20.19.0)(jiti@2.4.2)(lightningcss@1.30.1))':
+  '@vitejs/plugin-react@4.5.2(vite@6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1))':
     dependencies:
       '@babel/core': 7.27.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.27.4)
@@ -3400,7 +3409,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.11
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 6.3.5(@types/node@20.19.0)(jiti@2.4.2)(lightningcss@1.30.1)
+      vite: 6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -5032,7 +5041,7 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  vite@6.3.5(@types/node@20.19.0)(jiti@2.4.2)(lightningcss@1.30.1):
+  vite@6.3.5(@types/node@22.15.31)(jiti@2.4.2)(lightningcss@1.30.1):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.4.5(picomatch@4.0.2)
@@ -5041,7 +5050,7 @@ snapshots:
       rollup: 4.42.0
       tinyglobby: 0.2.14
     optionalDependencies:
-      '@types/node': 20.19.0
+      '@types/node': 22.15.31
       fsevents: 2.3.3
       jiti: 2.4.2
       lightningcss: 1.30.1

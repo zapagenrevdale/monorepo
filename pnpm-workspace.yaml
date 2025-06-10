@@ -2,5 +2,19 @@ packages:
   - apps/*
   - packages/*
   - infra
+
 ignoredBuiltDependencies:
   - esbuild
+
+catalog:
+  typescript: 5.8.3
+  "@types/node": ^22.14.0
+
+catalogs:
+  react19:
+    # React
+    react: 19.1.0
+    react-dom: 19.1.0
+    # React types
+    "@types/react": 19.1.2
+    "@types/react-dom": 19.1.2
