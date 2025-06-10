@@ -1,6 +1,7 @@
 {
   "name": "@gdz/infra",
   "version": "1.0.0",
+  "description": "The definition of infra is here.",
   "scripts": {
     "cache-clean": "git clean -xdf .next .turbo .open-next .cache",
     "clean": "git clean -xdf .next .turbo .open-next node_modules .cache",
