@@ -2,18 +2,34 @@
 
 function getSubDomain({
   domain,
-  sha
+  preview
 }: {
   domain: string
-  sha: string;
+  preview: boolean
 }) {
-  let prefix = sha ? `${sha}.` : "";
 
-  let subdomain = $app.protect ? `${prefix}${$app.stage}.${domain}` : null;
-  return subdomain;
+  if ($app.stage === "prod") {
+    return domain;
+  }
+  if ($app.stage === "dev" || preview) {
+    return "dev." + domain
+  }
 }
 
-function getPrefix({
+function getRouter({
+  subdomain,
+}: {
+  subdomain: string
+}) {
+  return $app.stage === "prod" || $app.stage === "dev" ? new sst.aws.Router("MyRouter", {
+    domain: {
+      name: subdomain,
+      aliases: [`*.${subdomain}`]
+    }
+  }) : sst.aws.Router.get("MyRouter", "E3R5CI23JSB7S7");
+}
+
+function getDomain({
   name,
   sha,
   subdomain
@@ -40,20 +56,15 @@ export default $config({
     const domain = "genrevzapa.com";
     const sha = process.env.COMMIT_SHA ?? undefined;
 
-    const subdomain = getSubDomain({ domain, sha })
+    const subdomain = getSubDomain({ domain, preview: Boolean(sha) })
 
-    const router = subdomain ? new sst.aws.Router("MyRouter", {
-      domain: {
-        name: subdomain,
-        aliases: [`*.${subdomain}`]
-      }
-    }) : new sst.aws.Router("MyRouter");
+    const router = subdomain ? getRouter({ subdomain }) : new sst.aws.Router("MyRouter");
 
     new sst.aws.StaticSite("MyWeb", {
       path: "../apps/my-app/",
       router: {
         instance: router,
-        domain: `${getPrefix({ subdomain, name: "app", sha })}.${subdomain}`
+        domain: subdomain ? getDomain({ subdomain, name: "app", sha }) : router.url
       },
       build: {
         command: "pnpm run build",
@@ -65,7 +76,7 @@ export default $config({
       path: "../apps/my-docs/",
       router: {
         instance: router,
-        domain: `${getPrefix({ subdomain, name: "docs", sha })}.${subdomain}`
+        domain: subdomain ? getDomain({ subdomain, name: "docs", sha }) : router.url
       }
     });
 
@@ -74,7 +85,7 @@ export default $config({
       url: {
         router: {
           instance: router,
-          domain: `${getPrefix({ subdomain, name: "api", sha })}.${subdomain}`
+          domain: subdomain ? getDomain({ subdomain, name: "api", sha }) : router.url
         }
       }
     });
