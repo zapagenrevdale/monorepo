@@ -42,4 +42,4 @@ jobs:
       - name: Preview Deploy
         run: |
           cd infra
-          pnpm sst remove --stage preview-${ github.event.pull_request.number }
+          pnpm sst remove --stage preview-${{ github.event.pull_request.number }}

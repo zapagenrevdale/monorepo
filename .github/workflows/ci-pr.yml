@@ -42,5 +42,5 @@ jobs:
       - name: Preview Deploy
         run: |
           cd infra
-          export PR_NUMBER=${ github.event.pull_request.number }
-          pnpm sst deploy --stage preview-${ github.event.pull_request.number }
+          export PR_NUMBER=${{ github.event.pull_request.number }}
+          pnpm sst deploy --stage preview-${{ github.event.pull_request.number }}
