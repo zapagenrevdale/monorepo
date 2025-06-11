@@ -1,4 +1,4 @@
-name: PR Preview Deprovision
+name: PR Preview Removal
 
 on:
   pull_request:
