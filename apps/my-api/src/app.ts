@@ -14,8 +14,13 @@ export function createApp({ enableCors }: { enableCors?: boolean }) {
     app.use("/v1/*", cors());
   }
 
-  app.get("/api", (c) => {
+  app.get("/", (c) => {
     return c.text(`My API ${version}`);
+  });
+
+
+  app.get("/api", (c) => {
+    return c.text("API is working just fine");
   });
 
   return app;

@@ -1,11 +1,10 @@
-name: Preview Deployment
+name: PR Preview Deprovision
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches-ignore:
+    types: [closed]
+    branches:
       - dev
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -43,5 +42,4 @@ jobs:
       - name: Preview Deploy
         run: |
           cd infra
-          export COMMIT_SHA=${GITHUB_SHA::7}
-          pnpm sst deploy --stage dev
+          pnpm sst remove --stage preview-${{ github.event.pull_request.number }}
