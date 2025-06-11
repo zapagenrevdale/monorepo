@@ -31,14 +31,14 @@ function getRouter({
 
 function getDomain({
   name,
-  sha,
+  prNumber,
   subdomain
 }: {
   name: string
   subdomain: string;
-  sha?: string;
+  prNumber?: string;
 }) {
-  const previewTag = sha ? `-${sha}` : "";
+  const previewTag = prNumber ? `-${prNumber}` : "";
   return `${name}${previewTag}.${subdomain}`;
 }
 
@@ -54,9 +54,9 @@ export default $config({
   async run() {
 
     const domain = "genrevzapa.com";
-    const sha = process.env.COMMIT_SHA ?? undefined;
+    const prNumber = process.env.PR_NUMBER ?? undefined;
 
-    const subdomain = getSubDomain({ domain, preview: Boolean(sha) })
+    const subdomain = getSubDomain({ domain, preview: Boolean(prNumber) })
 
     const router = subdomain ? getRouter({ subdomain }) : new sst.aws.Router("MyRouter");
 
@@ -64,7 +64,7 @@ export default $config({
       path: "../apps/my-app/",
       router: {
         instance: router,
-        domain: subdomain ? getDomain({ subdomain, name: "app", sha }) : router.url
+        domain: subdomain ? getDomain({ subdomain, name: "app", prNumber }) : router.url
       },
       build: {
         command: "pnpm run build",
@@ -76,7 +76,7 @@ export default $config({
       path: "../apps/my-docs/",
       router: {
         instance: router,
-        domain: subdomain ? getDomain({ subdomain, name: "docs", sha }) : router.url
+        domain: subdomain ? getDomain({ subdomain, name: "docs", prNumber }) : router.url
       }
     });
 
@@ -85,7 +85,7 @@ export default $config({
       url: {
         router: {
           instance: router,
-          domain: subdomain ? getDomain({ subdomain, name: "api", sha }) : router.url
+          domain: subdomain ? getDomain({ subdomain, name: "api", prNumber }) : router.url
         }
       }
     });
