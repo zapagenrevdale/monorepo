@@ -7,7 +7,7 @@
     "build": "turbo run build"
   },
   "version": "1.0.0",
-  "description": "This is my ideal monorepo setup",
+  "description": "Monorepo + SST + Workflows Template",
   "packageManager": "pnpm@10.10.0",
   "engines": {
     "node": ">=22.14.0",
