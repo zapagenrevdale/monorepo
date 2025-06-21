@@ -15,7 +15,7 @@ permissions:
   id-token: write
 
 jobs:
-  infra-deploy:
+  infra-delete:
     runs-on: ubuntu-latest
     steps:
       - name: Configure AWS credentials
