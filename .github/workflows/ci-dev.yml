@@ -43,8 +43,8 @@ jobs:
         run: pnpm install
 
       - name: Preview Deploy
-        env: DATABASE_URL=${{ secrets.DATABASE_URL }}
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           cd infra
-          export DATABASE_URL=$DATABASE_URL
           pnpm sst deploy --stage dev
