@@ -1,0 +1,72 @@
+name: Database Backup
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  push:
+    paths:
+      - packages/db/**
+      - ".github/workflows/backup-db.yml"
+    branches:
+      - main
+      - dev
+
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - dev
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  backup:
+    runs-on: DB Migration Runner
+    environment: ${{ github.ref_name }}-db-backups
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL 17
+        run: |
+          sudo apt-get update
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+          sudo apt-get update
+          sudo apt-get install postgresql-17 postgresql-client-17 -y
+          psql --version
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Create database backup
+        id: backup
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: |
+          TIMESTAMP=$(date +"%Y-%m-%d-%H%M%S")
+          FORMATTED_REF=$(echo ${{ github.ref_name }} | sed 's/\//-/g')
+          export BACKUP_FILENAME=monorepo-${FORMATTED_REF}-${{ github.sha }}-${TIMESTAMP}.sql
+          echo "[LOG] backup filename: $BACKUP_FILENAME"
+          echo "[LOG] pg_dump version: $(pg_dump --version)"
+          pg_dump -Fc -U $PGUSER -d $PGDATABASE -h $PGHOST -p $PGPORT -f $BACKUP_FILENAME
+          echo "backup_file=$(pwd)/$BACKUP_FILENAME" >> $GITHUB_OUTPUT
+
+      - name: Upload backup to s3
+        run: |
+          aws s3 cp ${{ steps.backup.outputs.backup_file }} s3://${{ secrets.AWS_BUCKET }}/
+
+      - name: Remove local backup file
+        run: |
+          sudo rm ${{ steps.backup.outputs.backup_file }}

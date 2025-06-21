@@ -1,0 +1,30 @@
+{
+  "name": "@gdz/db",
+  "version": "1.0.0",
+  "description": "Database",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "cache-clean": "git clean -xdf .next .turbo .open-next .cache",
+    "clean": "git clean -xdf .next .turbo .open-next node_modules .cache",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint . --max-warnings=0 --format stylish",
+    "lint:fix": "eslint . --fix --max-warnings=0"
+  },
+  "devDependencies": {
+    "@gdz/eslint": "workspace:^",
+    "@gdz/prettier": "workspace:^",
+    "@gdz/typescript": "workspace:^",
+    "@types/node": "catalog:",
+    "prisma": "^6.9.0",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^6.9.0",
+    "@prisma/client": "6.9.0"
+  },
+  "prettier": "@gdz/prettier"
+}

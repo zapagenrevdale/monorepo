@@ -9,6 +9,7 @@ catalog:
   tailwindcss: ^3.4.17
   typescript: 5.8.3
   '@types/node': 22.14.0
+  tsx: ^4.19.4
 catalogs:
   react19:
     react: 19.1.0
@@ -18,3 +19,6 @@ catalogs:
 ignoredBuiltDependencies:
   - aws-sdk
   - esbuild
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - prisma

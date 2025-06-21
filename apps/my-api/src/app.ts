@@ -1,8 +1,10 @@
+import "dotenv/config";
 import { version } from "../package.json";
 import { Hono } from 'hono'
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { trimTrailingSlash } from "hono/trailing-slash";
+import { prisma } from "@gdz/db";
 
 export function createApp({ enableCors }: { enableCors?: boolean }) {
   const app = new Hono()
@@ -21,6 +23,12 @@ export function createApp({ enableCors }: { enableCors?: boolean }) {
 
   app.get("/api", (c) => {
     return c.text("API is working just fine");
+  });
+
+  app.get("/quotes", async (c) => {
+    const quotes = await prisma.quote.findMany()
+    const random = quotes[Math.floor(Math.random() * quotes.length)]
+    return c.json(random)
   });
 
   return app;
