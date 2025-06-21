@@ -72,8 +72,9 @@ export default $config({
 
 
     new sst.aws.Function("MyApi", {
+      architecture: "arm64",
       handler: "../apps/my-api/src/index.handler",
-      copyFiles: [{ from: "../packages/db/node_modules/@prisma/client/", to: "node_modules/@prisma/client" }],
+      copyFiles: [{ from: "../packages/db/generated/prisma/", to: "generated/prisma" }],
       url: {
         router: {
           instance: router,
@@ -84,7 +85,7 @@ export default $config({
         DATABASE_URL: process.env.DATABASE_URL,
       },
       logging: {
-        logGroup: "ethereal",
+        logGroup: "my-api",
       },
       nodejs: {
         esbuild: {
