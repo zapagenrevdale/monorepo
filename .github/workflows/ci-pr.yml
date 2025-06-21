@@ -61,7 +61,7 @@ jobs:
       # TODO: separate job for migration
       - name: Prisma Deploy
         env:
-          DATABASE_URL: "postgresql://${{ secrets.PGUSER }}:${{ secrets.PGPASSWORD }}@${{ secrets.PGHOST }}:${{ secrets.PGPORT }}/preview-${{ github.event.pull_request.number }}"
+          DATABASE_URL: "postgresql://${{ secrets.PGUSER }}:${{ secrets.PGPASSWORD }}@${{ secrets.PGHOST }}:${{ secrets.PGPORT }}/preview-${{ github.event.pull_request.number }}?sslmode=no-verify&schema=public"
         run: |
           cd packages/db
           npx prisma migrate deploy
