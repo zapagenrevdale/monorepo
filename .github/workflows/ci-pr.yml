@@ -43,6 +43,12 @@ jobs:
       - name: Install deps
         run: pnpm install
 
+
+      - name: Prisma generate
+        run: |
+          cd packages/db
+          pnpm db:generate
+
       - name: Preview Deploy
         env:
           DATABASE_URL: "postgresql://${{ secrets.PGUSER }}:${{ secrets.PGPASSWORD }}@${{ secrets.PGHOST }}:${{ secrets.PGPORT }}/preview-${{ github.event.pull_request.number }}"
