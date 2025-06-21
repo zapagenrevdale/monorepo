@@ -11,11 +11,6 @@ on:
       - main
       - dev
 
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - dev
-
   workflow_dispatch:
 
 permissions:
@@ -24,7 +19,7 @@ permissions:
 
 jobs:
   backup:
-    runs-on: DB Migration Runner
+    runs-on: self-hosted
     environment: ${{ github.ref_name }}-db-backups
     steps:
       - name: Checkout repository

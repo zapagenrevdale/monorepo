@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   backup:
-    runs-on: DB Migration Runner
+    runs-on: self-hosted
     environment: dev-db-backups
     steps:
       - name: Checkout repository
