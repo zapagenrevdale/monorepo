@@ -16,7 +16,7 @@ permissions:
 jobs:
   infra-deploy:
     runs-on: ubuntu-latest
-    env:
+    environment: dev
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -43,6 +43,8 @@ jobs:
         run: pnpm install
 
       - name: Preview Deploy
+        env: DATABASE_URL=${{ secrets.DATABASE_URL }}
         run: |
           cd infra
+          export DATABASE_URL=$DATABASE_URL
           pnpm sst deploy --stage dev
