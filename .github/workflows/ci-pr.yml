@@ -16,10 +16,8 @@ permissions:
 
 jobs:
   infra-deploy:
-    environment: dev
+    environment: dev-db-backups
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
@@ -46,7 +44,16 @@ jobs:
         run: pnpm install
 
       - name: Preview Deploy
+        env:
+          DATABASE_URL: "postgresql://${{ secrets.PGUSER }}:${{ secrets.PGPASSWORD }}@${{ secrets.PGHOST }}:${{ secrets.PGPORT }}/preview-${{ github.event.pull_request.number }}"
         run: |
           cd infra
+          export DATABASE_URL
           export PR_NUMBER=${{ github.event.pull_request.number }}
           pnpm sst deploy --stage preview-${{ github.event.pull_request.number }}
+
+      # TODO: separate job for migration
+      - name: Prisma Deploy
+        run: |
+          cd packages/db
+          npx prisma migrate deploy

@@ -29,11 +29,6 @@ jobs:
           sudo apt-get install postgresql-17 postgresql-client-17 -y
           psql --version
 
-      - name: Debug PGHOST
-        run: echo "PGHOST=$PGHOST"
-        env:
-          PGHOST: ${{ secrets.PGHOST }}
-
       - name: Create database backup
         id: backup
         env:
@@ -51,7 +46,7 @@ jobs:
           pg_dump -Fc -U $PGUSER -d $PGDATABASE -h $PGHOST -p $PGPORT -f $BACKUP_FILENAME
           echo "backup_file=$(pwd)/$BACKUP_FILENAME" >> $GITHUB_OUTPUT
 
-      - name: Create preview database from backup
+      - name: Create preview database from backup (if not exists)
         env:
           PGHOST: ${{ secrets.PGHOST }}
           PGUSER: ${{ secrets.PGUSER }}
@@ -62,12 +57,18 @@ jobs:
           BACKUP_FILENAME="${{ steps.backup.outputs.backup_file }}"
           PREVIEW_DB="preview-${{ github.event.pull_request.number }}"
 
-          echo "[LOG] Creating preview DB: $PREVIEW_DB"
-          createdb -h $PGHOST -U $PGUSER -p $PGPORT $PREVIEW_DB
+          echo "[LOG] Checking if preview DB exists: $PREVIEW_DB"
+          DB_EXISTS=$(psql -h $PGHOST -U $PGUSER -p $PGPORT -tAc "SELECT 1 FROM pg_database WHERE datname='$PREVIEW_DB'")
 
-          echo "[LOG] Restoring backup into preview DB"
-          pg_restore -U $PGUSER -d $PREVIEW_DB -h $PGHOST -p $PGPORT -Fc "$BACKUP_FILENAME"
+          if [ "$DB_EXISTS" = "1" ]; then
+            echo "[LOG] Database $PREVIEW_DB already exists. Skipping creation and restore."
+          else
+            echo "[LOG] Creating preview DB: $PREVIEW_DB"
+            createdb -h $PGHOST -U $PGUSER -p $PGPORT $PREVIEW_DB
 
+            echo "[LOG] Restoring backup into preview DB"
+            pg_restore -U $PGUSER -d $PREVIEW_DB -h $PGHOST -p $PGPORT -Fc "$BACKUP_FILENAME"
+          fi
 
       - name: Remove local backup file
         run: |
