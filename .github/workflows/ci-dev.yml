@@ -42,6 +42,11 @@ jobs:
       - name: Install deps
         run: pnpm install
 
+      - name: Prisma generate
+        run: |
+          cd packages/db
+          pnpm db:generate
+
       - name: Preview Deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
