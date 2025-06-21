@@ -88,7 +88,7 @@ export default $config({
         output: "dist",
       },
       environment: {
-        VITE_API_URL: api.url.get(),
+        VITE_API_URL: api.url,
       }
     });
 
@@ -99,7 +99,7 @@ export default $config({
         domain: subdomain ? getDomain({ subdomain, name: "docs", prNumber }) : router.url,
       },
       environment: {
-        NEXT_PUBLIC_API_URL: api.url.get()
+        NEXT_PUBLIC_API_URL: api.url
       }
     });
 
