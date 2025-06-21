@@ -50,28 +50,8 @@ export default $config({
 
     const router = subdomain ? getRouter({ subdomain }) : new sst.aws.Router("MyRouter");
 
-    new sst.aws.StaticSite("MyWeb", {
-      path: "../apps/my-app/",
-      router: {
-        instance: router,
-        domain: subdomain ? getDomain({ subdomain, name: "app", prNumber }) : router.url,
-      },
-      build: {
-        command: "pnpm run build",
-        output: "dist",
-      },
-    });
 
-    new sst.aws.Nextjs("MyDocs", {
-      path: "../apps/my-docs/",
-      router: {
-        instance: router,
-        domain: subdomain ? getDomain({ subdomain, name: "docs", prNumber }) : router.url,
-      },
-    });
-
-
-    new sst.aws.Function("MyApi", {
+    const api = new sst.aws.Function("MyApi", {
       architecture: "arm64",
       handler: "../apps/my-api/src/index.handler",
       copyFiles: [{ from: "../packages/db/generated/prisma/", to: "generated/prisma" }],
@@ -96,5 +76,33 @@ export default $config({
       },
       runtime: "nodejs22.x",
     });
+
+    new sst.aws.StaticSite("MyWeb", {
+      path: "../apps/my-app/",
+      router: {
+        instance: router,
+        domain: subdomain ? getDomain({ subdomain, name: "app", prNumber }) : router.url,
+      },
+      build: {
+        command: "pnpm run build",
+        output: "dist",
+      },
+      environment: {
+        VITE_API_URL: api.url.get(),
+      }
+    });
+
+    new sst.aws.Nextjs("MyDocs", {
+      path: "../apps/my-docs/",
+      router: {
+        instance: router,
+        domain: subdomain ? getDomain({ subdomain, name: "docs", prNumber }) : router.url,
+      },
+      environment: {
+        NEXT_PUBLIC_API_URL: api.url.get()
+      }
+    });
+
+
   },
 });

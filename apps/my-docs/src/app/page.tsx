@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 type Quote = { author: string; text: string; };
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function Page() {
   const [host, setHost] = useState("");
