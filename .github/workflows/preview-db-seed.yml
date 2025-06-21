@@ -29,6 +29,11 @@ jobs:
           sudo apt-get install postgresql-17 postgresql-client-17 -y
           psql --version
 
+      - name: Debug PGHOST
+        run: echo "PGHOST=$PGHOST"
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+
       - name: Create database backup
         id: backup
         env:
