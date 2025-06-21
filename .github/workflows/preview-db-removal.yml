@@ -1,0 +1,51 @@
+name: Preview Database Seed
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - dev
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  preview-db-delete:
+    runs-on: self-hosted
+    environment: dev-db-backups
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL 17
+        run: |
+          sudo apt-get update
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
+          sudo apt-get update
+          sudo apt-get install postgresql-17 postgresql-client-17 -y
+          psql --version
+
+      - name: Delete preview database
+        env:
+          PGHOST: ${{ secrets.PGHOST }}
+          PGUSER: ${{ secrets.PGUSER }}
+          PGPORT: ${{ secrets.PGPORT }}
+          PGPASSWORD: ${{ secrets.PGPASSWORD }}
+          PGDATABASE: ${{ secrets.PGDATABASE }}
+        run: |
+          PREVIEW_DB="preview-${{ github.event.pull_request.number }}"
+          
+          echo "[LOG] Checking if preview DB exists: $PREVIEW_DB"
+          DB_EXISTS=$(psql -h $PGHOST -U $PGUSER -p $PGPORT -tAc "SELECT 1 FROM pg_database WHERE datname='$PREVIEW_DB'")
+
+          if [ "$DB_EXISTS" = "1" ]; then
+            echo "[LOG] Dropping database $PREVIEW_DB"
+            dropdb -h $PGHOST -U $PGUSER -p $PGPORT $PREVIEW_DB
+            echo "[LOG] Database $PREVIEW_DB successfully deleted"
+          else
+            echo "[LOG] Database $PREVIEW_DB does not exist. Nothing to delete."
+          fi
