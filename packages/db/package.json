@@ -4,9 +4,7 @@
   "description": "Database",
   "main": "./index.ts",
   "export": {
-    "/": "./index.ts",
-    "/src/*": "./src/*",
-    "/generated/*": "./generated/*"
+    "/": "./index.ts"
   },
   "types": "./index.ts",
   "scripts": {

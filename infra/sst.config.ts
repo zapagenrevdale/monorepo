@@ -2,7 +2,7 @@
 
 function getSubDomain({ domain, preview }: { domain: string; preview: boolean }) {
   if ($app.stage === "prod") {
-    return domain;
+    return "prod." + domain;
   }
   if ($app.stage === "dev" || preview) {
     return "dev." + domain;

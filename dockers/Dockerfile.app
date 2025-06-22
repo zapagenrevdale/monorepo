@@ -9,7 +9,7 @@ RUN npm install -g pnpm turbo
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
 
 # Copy all package.json files in apps directory
-COPY apps/*/package.json ./apps/
+COPY apps/my-app/package.json ./apps/my-app/
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
@@ -17,13 +17,10 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-WORKDIR /app/apps/my-app
-RUN pnpm run build
-
-WORKDIR /app
+RUN pnpm build --filter=@gdz/app
 
 # Find the actual vite app directory and create runtime structure
-RUN VITE_APP_DIR=$(find /app/apps -name "dist" -type d | head -1 | xargs dirname) && \
+RUN VITE_APP_DIR=$(find /app/apps/my-app -name "dist" -type d | head -1 | xargs dirname) && \
     mkdir -p /app/runtime/vite-app && \
     cp -r $VITE_APP_DIR/dist /app/runtime/vite-app/ && \
     cp $VITE_APP_DIR/package.json /app/runtime/vite-app/ && \
