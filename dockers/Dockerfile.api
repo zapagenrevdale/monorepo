@@ -1,0 +1,49 @@
+FROM node:22-alpine AS base
+
+# ARG DATABASE_URL
+#
+# ENV DATABASE_URL=$DATABASE_URL
+
+FROM base AS builder
+
+RUN apk update
+RUN apk add --no-cache libc6-compat openssl
+
+WORKDIR /app
+
+RUN npm install -g turbo@2.4.4
+COPY . .
+
+RUN turbo prune @gdz/api --docker
+
+FROM base AS runner
+
+RUN apk update
+RUN apk add --no-cache libc6-compat openssl
+
+WORKDIR /app
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 api
+
+COPY .gitignore .gitignore
+COPY --from=builder --chown=api:nodejs /app/out/json/ .
+COPY --from=builder --chown=api:nodejs /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+
+RUN npm i -g corepack@latest
+RUN corepack enable && corepack install
+RUN pnpm --version
+RUN pnpm install --ignore-scripts
+
+COPY --from=builder --chown=api:nodejs /app/out/full/ .
+
+RUN pnpm --filter @gdz/db run db:generate
+RUN pnpm run build --filter @gdz/api
+
+EXPOSE $PORT
+
+WORKDIR /app/apps/my-api
+
+USER api
+
+CMD ["node", "dist/runner.js"]

@@ -1,22 +1,25 @@
 {
   "name": "@gdz/api",
-  "type": "module",
   "version": "1.0.0",
   "scripts": {
     "dev": "tsx watch src/runner.ts",
+    "build": "tsc --noEmit && rm -rf dist && tsup",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@gdz/eslint": "workspace:^",
     "@gdz/prettier": "workspace:^",
     "@gdz/typescript": "workspace:*",
-    "tsx": "^4.19.3",
-    "typescript": "catalog:",
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
+    "@gdz/db": "workspace:^",
     "@hono/node-server": "^1.14.4",
-    "hono": "^4.7.11"
+    "dotenv": "^16.5.0",
+    "hono": "^4.7.11",
+    "tsup": "^8.5.0"
   },
-  "prettier": "@aether/prettier"
+  "prettier": "@gdz/prettier"
 }

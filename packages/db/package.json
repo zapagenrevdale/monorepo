@@ -1,32 +1,33 @@
 {
-  "name": "@gdz/infra",
+  "name": "@gdz/db",
   "version": "1.0.0",
-  "description": "The definition of infra is here.",
+  "description": "Database",
+  "main": "./index.ts",
+  "export": {
+    "/": "./index.ts"
+  },
+  "types": "./index.ts",
   "scripts": {
+    "db:generate": "prisma generate",
     "cache-clean": "git clean -xdf .next .turbo .open-next .cache",
     "clean": "git clean -xdf .next .turbo .open-next node_modules .cache",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint . --max-warnings=0 --format stylish",
-    "lint:fix": "eslint . --fix --max-warnings=0",
-    "sst:dev": "sst dev"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@paralleldrive/cuid2": "^2.2.2",
-    "@t3-oss/env-core": "^0.6.1",
-    "sst": "3.17.4"
+    "lint:fix": "eslint . --fix --max-warnings=0"
   },
   "devDependencies": {
     "@gdz/eslint": "workspace:^",
     "@gdz/prettier": "workspace:^",
     "@gdz/typescript": "workspace:^",
-    "@types/aws-lambda": "8.10.149",
-    "@types/fs-extra": "^11.0.4",
     "@types/node": "catalog:",
+    "prisma": "^6.9.0",
+    "tsx": "catalog:",
     "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^6.9.0",
+    "@prisma/client": "6.9.0"
   },
   "prettier": "@gdz/prettier"
 }

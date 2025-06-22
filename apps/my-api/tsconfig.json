@@ -2,9 +2,11 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@gdz/typescript/base.json",
   "compilerOptions": {
-    "traceResolution": true,
     "target": "ESNext",
-    "module": "ESNext",
+    "types": [
+      "node"
+    ],
+    "module": "esnext",
     "moduleResolution": "Bundler",
     "esModuleInterop": true,
     "strict": true,
@@ -22,7 +24,6 @@
   },
   "include": [
     "src",
-    "types.d.ts"
   ],
   "exclude": [
     "node_modules",

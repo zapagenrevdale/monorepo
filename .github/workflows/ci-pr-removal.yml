@@ -1,11 +1,10 @@
-name: Preview Deployment
+name: PR Preview Removal
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches-ignore:
+    types: [closed]
+    branches:
       - dev
-      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -16,13 +15,16 @@ permissions:
   id-token: write
 
 jobs:
-  infra-deploy:
+  infra-delete:
     runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
     steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -43,5 +45,5 @@ jobs:
       - name: Preview Deploy
         run: |
           cd infra
-          export COMMIT_SHA=${GITHUB_SHA::7}
-          pnpm sst deploy --stage dev
+          pnpm sst remove --stage preview-${{ github.event.pull_request.number }}
+
