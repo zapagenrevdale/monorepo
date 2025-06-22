@@ -54,7 +54,7 @@ export default $config({
     const api = new sst.aws.Function("MyApi", {
       architecture: "arm64",
       handler: "../apps/my-api/src/index.handler",
-      copyFiles: [{ from: "../packages/db/generated/prisma/", to: "generated/prisma" }],
+      copyFiles: [{ from: "../packages/db/node_modules/@prisma/client/", to: "/node_modules/@prisma/client" }],
       url: {
         router: {
           instance: router,
