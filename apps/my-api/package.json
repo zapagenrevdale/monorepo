@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "tsx watch src/runner.ts",
+    "build": "tsc --noEmit && rm -rf dist && tsup",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
@@ -17,7 +18,8 @@
     "@gdz/db": "workspace:^",
     "@hono/node-server": "^1.14.4",
     "dotenv": "^16.5.0",
-    "hono": "^4.7.11"
+    "hono": "^4.7.11",
+    "tsup": "^8.5.0"
   },
   "prettier": "@gdz/prettier"
 }

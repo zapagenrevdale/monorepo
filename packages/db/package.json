@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Database",
   "main": "./index.ts",
+  "export": {
+    "/": "./index.ts",
+    "/src/*": "./src/*",
+    "/generated/*": "./generated/*"
+  },
   "types": "./index.ts",
   "scripts": {
     "db:generate": "prisma generate",

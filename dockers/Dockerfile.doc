@@ -1,0 +1,66 @@
+# Stage 1: Installer - Install dependencies and build  
+FROM node:22-alpine AS installer
+WORKDIR /app
+
+# Install pnpm and turbo globally
+RUN npm install -g pnpm turbo
+
+# Copy workspace configuration
+COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml* ./
+
+# Copy all package.json files
+COPY apps/my-docs/package.json ./apps/my-docs/
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy source code
+COPY . .
+
+# Build the application
+RUN pnpm build --filter=@gdz/docs
+
+# Create a minimal structure for copying
+RUN mkdir -p /app/runtime/apps/my-docs && \
+    cp -r /app/apps/my-docs/.next /app/runtime/apps/my-docs/ && \
+    cp /app/apps/my-docs/package.json /app/runtime/apps/my-docs/ && \
+    cp -r /app/apps/my-docs/public /app/runtime/apps/my-docs/ 2>/dev/null || mkdir -p /app/runtime/apps/my-docs/public && \
+    find /app/apps/my-docs -name "next.config.*" -exec cp {} /app/runtime/apps/my-docs/ \; 2>/dev/null || true
+
+# Stage 2: Runner - Production runtime
+FROM node:22-alpine AS runner
+WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Create nextjs user and group
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Copy workspace files for production install
+COPY --from=installer /app/package.json ./package.json
+COPY --from=installer /app/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=installer /app/pnpm-workspace.yaml* ./
+COPY --from=installer /app/runtime/apps/my-docs/package.json ./apps/my-docs/package.json
+
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile
+
+# Copy built application
+COPY --from=installer --chown=nextjs:nodejs /app/runtime/apps/my-docs ./apps/my-docs
+
+# Switch to non-root user
+USER nextjs
+
+# Set working directory to the app
+WORKDIR /app/apps/my-docs
+
+# Expose port
+EXPOSE 3000
+
+# Set environment variable
+ENV NODE_ENV=production
+
+# Start the application
+CMD ["pnpm", "start"]
