@@ -17,8 +17,10 @@ RUN pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build the Vite application (replace 'your-vite-app-name' with actual package name)
-RUN pnpm build --filter=@gdz/app
+WORKDIR /app/apps/my-app
+RUN pnpm run build
+
+WORKDIR /app
 
 # Find the actual vite app directory and create runtime structure
 RUN VITE_APP_DIR=$(find /app/apps -name "dist" -type d | head -1 | xargs dirname) && \
