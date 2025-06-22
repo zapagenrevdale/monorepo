@@ -2,7 +2,7 @@ name: Parallel GHCR Image Builds
 
 on:
   push:
-    branches: [dev]
+    branches: [main]
 
 jobs:
   app:
