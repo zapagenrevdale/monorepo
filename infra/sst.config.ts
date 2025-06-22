@@ -60,10 +60,6 @@ export default $config({
           to: "node_modules/@prisma/client/runtime"
         },
         {
-          from: "../packages/db/node_modules/@prisma/client/client.js",
-          to: "node_modules/@prisma/client/client.js"
-        },
-        {
           from: "../packages/db/node_modules/@prisma/client/default.js",
           to: "node_modules/@prisma/client/default.js"
         },
@@ -104,8 +100,6 @@ export default $config({
           from: "../packages/db/node_modules/@prisma/client/wasm.js",
           to: "node_modules/@prisma/client/wasm.js"
         },
-
-
       ],
 
       url: {
