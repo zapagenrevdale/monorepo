@@ -1,4 +1,4 @@
-name: Preview Database Seed
+name: Preview Database Removal
 
 on:
   pull_request:
