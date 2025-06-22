@@ -17,10 +17,10 @@ function App() {
           const data = await response.json() as Quote;
           setQuote(data)
         } else {
-          alert(response)
+          console.log(response)
         }
       } catch (e) {
-        alert(e)
+        console.log(e)
       }
     }
 
@@ -37,7 +37,7 @@ function App() {
   return (
     <main className="flex flex-col justify-center items-center h-screen gap-6">
       <h1 className="text-7xl font-bold">
-        My App
+        My App - Preview
       </h1>
       <p>
         running at <code className="text-white bg-primary px-2 py-1">{window.location.host}</code>
