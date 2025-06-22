@@ -56,49 +56,8 @@ export default $config({
       handler: "../apps/my-api/src/index.handler",
       copyFiles: [
         {
-          from: "../packages/db/node_modules/@prisma/client/runtime/",
-          to: "node_modules/@prisma/client/runtime"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/default.js",
-          to: "node_modules/@prisma/client/default.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/edge.js",
-          to: "node_modules/@prisma/client/edge.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/extension.js",
-          to: "node_modules/@prisma/client/extension.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/index-browser.js",
-          to: "node_modules/@prisma/client/index-browser.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/index.js",
-          to: "node_modules/@prisma/client/index.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/package.json",
-          to: "node_modules/@prisma/client/package.json"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/react-native.js",
-          to: "node_modules/@prisma/client/react-native.js"
-        },
-
-        {
-          from: "../packages/db/node_modules/@prisma/client/sql.js",
-          to: "node_modules/@prisma/client/sql.js"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/sql.mjs",
-          to: "node_modules/@prisma/client/sql.mjs"
-        },
-        {
-          from: "../packages/db/node_modules/@prisma/client/wasm.js",
-          to: "node_modules/@prisma/client/wasm.js"
+          from: "../packages/db/generated/prisma/",
+          to: "generated/prisma"
         },
       ],
 
